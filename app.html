@@ -39,7 +39,7 @@ function card(r){
  if(r.kind==='agreement')a.append(field('p','agreement-state',r.ownerAccepted?'موافقتك على الصيغة مسجلة. ده لسه مش اتفاق مشترك.':'مقترح فقط. مش اتفاق وافق عليه الطرفان.'));
  a.append(field('p','small',`الإصدار ${r.revision}`));
  const controls=field('div','row-actions');
- if(r.trashed){controls.append(btn('رجّع العنصر',()=>act(()=>change(r,{trashed:false,ownerAccepted:false}))));controls.append(btn('حذف نهائي...',()=>showConfirm('الحذف النهائي لا يرجع من السلة. احتفظ بنسخة خاصة لو محتاجه.',()=>act(async()=>{await runTransaction(db,async tx=>{const s=await tx.get(doc(entries,r.id));if(!s.exists()||s.data().revision!==r.revision)throw Error('conflict');tx.delete(s.ref);});tell('تم الحذف النهائي من الخادم.');})));}
+ if(r.trashed){controls.append(btn('رجّع العنصر',()=>act(()=>change(r,{trashed:false,ownerAccepted:false}))));controls.append(btn('حذف نهائي...',()=>showConfirm('الحذف النهائي لا يرجع من السلة. احتفظ بنسخة خاصة لو محتاجه.',()=>act(async()=>{await runTransaction(db,async tx=>{const s=await tx.get(doc(entries,r.id));if(!s.exists()||s.data().revision!==r.revision)throw Error('conflict');tx.delete(s.ref);});tell('تم الحذف النهائي من الخادم.');}))));}
  else{controls.append(btn('تعديل',()=>edit(r)));if(r.kind==='agreement'&&!r.ownerAccepted)controls.append(btn('سجّل موافقتي',()=>act(()=>change(r,{ownerAccepted:true}))));controls.append(btn('انقل للسلة',()=>act(()=>change(r,{trashed:true,ownerAccepted:false}))));}
  a.append(controls);return a;
 }
